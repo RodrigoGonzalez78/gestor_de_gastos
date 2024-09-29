@@ -31,7 +31,6 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         descripcion TEXT NOT NULL,
         color TEXT,
-        icono TEXT
       )
     ''');
 
@@ -53,5 +52,19 @@ class DatabaseHelper {
         FOREIGN KEY (tipo_operacion) REFERENCES TipoOperacion (id)
       )
     ''');
+
+    // Insertar datos predefinidos en TipoOperacion (gasto e ingreso)
+    await db.insert('TipoOperacion', {'descripcion': 'Gasto'});
+    await db.insert('TipoOperacion', {'descripcion': 'Ingreso'});
+
+    // Insertar datos predefinidos en Categoria (salud, verduras, etc.)
+    await db
+        .insert('Categoria', {'descripcion': 'Salud 💊', 'color': '#00FF00'});
+    await db.insert(
+        'Categoria', {'descripcion': 'Verduras 🥦', 'color': '#FFA500'});
+    await db.insert(
+        'Categoria', {'descripcion': 'Transporte 🚗', 'color': '#0000FF'});
+    await db
+        .insert('Categoria', {'descripcion': 'Comida 🍕', 'color': '#FF4500'});
   }
 }
