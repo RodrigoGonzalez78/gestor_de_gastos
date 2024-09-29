@@ -31,12 +31,12 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          Expanded(
+          const Expanded(
             child: DefaultTabController(
               length: 2,
               child: Column(
                 children: [
-                  const TabBar(
+                  TabBar(
                     tabs: [
                       Tab(text: 'Expenses'),
                       Tab(text: 'Income'),
@@ -46,8 +46,8 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        _buildExpensesView(),
-                        const Center(child: Text('Income View')),
+                        Center(child: Text('Income View')),
+                        Center(child: Text('Income View')),
                       ],
                     ),
                   ),
@@ -63,31 +63,6 @@ class HomePage extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-    );
-  }
-
-  Widget _buildExpensesView() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text('Sep 23 - Sep 29', style: TextStyle(fontSize: 18)),
-        const SizedBox(height: 20),
-        Container(
-          width: 200,
-          height: 200,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.grey, width: 2),
-          ),
-          child: const Center(
-            child: Text(
-              'No expenses\nthis week',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

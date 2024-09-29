@@ -16,12 +16,22 @@ class _NewOperacionScreenState extends State<NewOperacionScreen> {
   final _fechaController = TextEditingController();
   String? _categoriaSeleccionada;
   String? _tipoOperacionSeleccionada;
+  DateTime _selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _fechaController.text = DateFormat('yyyy-MM-dd')
+        .format(_selectedDate); // Fecha actual por defecto
+  }
 
   void _agregarOperacion() async {
     if (_montoController.text.isEmpty ||
-        _fechaController.text.isEmpty ||
         _categoriaSeleccionada == null ||
         _tipoOperacionSeleccionada == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor complete todos los campos')),
+      );
       return;
     }
 
@@ -37,7 +47,7 @@ class _NewOperacionScreenState extends State<NewOperacionScreen> {
 
     // Limpiar campos
     _montoController.clear();
-    _fechaController.clear();
+    _fechaController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
     setState(() {
       _categoriaSeleccionada = null;
@@ -46,6 +56,21 @@ class _NewOperacionScreenState extends State<NewOperacionScreen> {
 
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Operación añadida!')));
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (pickedDate != null && pickedDate != _selectedDate) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _fechaController.text = DateFormat('yyyy-MM-dd').format(_selectedDate);
+      });
+    }
   }
 
   @override
@@ -65,14 +90,23 @@ class _NewOperacionScreenState extends State<NewOperacionScreen> {
             ),
             TextField(
               controller: _fechaController,
-              decoration:
-                  const InputDecoration(labelText: 'Fecha (YYYY-MM-DD)'),
+              decoration: const InputDecoration(labelText: 'Fecha'),
+              readOnly: true,
+              onTap: () => _selectDate(context),
             ),
             FutureBuilder<List<Map<String, dynamic>>>(
-              future:
-                  Provider.of<CategoriaHelper>(context).queryAllCategorias(),
+              future: Provider.of<CategoriaHelper>(context, listen: false)
+                  .queryAllCategorias(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.hasError) {
+                  return const Text('Error al cargar categorías');
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Text('No hay categorías disponibles');
+                }
                 return DropdownButton<String>(
                   hint: const Text('Seleccionar Categoría'),
                   value: _categoriaSeleccionada,
@@ -92,10 +126,18 @@ class _NewOperacionScreenState extends State<NewOperacionScreen> {
               },
             ),
             FutureBuilder<List<Map<String, dynamic>>>(
-              future: Provider.of<TipoOperacionHelper>(context)
+              future: Provider.of<TipoOperacionHelper>(context, listen: false)
                   .queryAllTiposOperacion(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const CircularProgressIndicator();
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.hasError) {
+                  return const Text('Error al cargar tipos de operación');
+                }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Text('No hay tipos de operación disponibles');
+                }
                 return DropdownButton<String>(
                   hint: const Text('Seleccionar Tipo de Operación'),
                   value: _tipoOperacionSeleccionada,

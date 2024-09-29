@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:gestor_de_gastos/domain/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
-class OperacionHelper {
+class OperacionHelper extends ChangeNotifier {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
   // Insertar una operación

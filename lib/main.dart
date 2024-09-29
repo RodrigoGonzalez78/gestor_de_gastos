@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_de_gastos/categoria/new_categoria_screen.dart';
+import 'package:gestor_de_gastos/domain/categoria_helper.dart';
+import 'package:gestor_de_gastos/domain/operacion_helper.dart';
+import 'package:gestor_de_gastos/domain/tipo_operacion_helper.dart';
 import 'package:gestor_de_gastos/home/home.dart';
 import 'package:gestor_de_gastos/operacion/new_operacion_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CategoriaHelper()),
+        ChangeNotifierProvider(
+            create: (_) => OperacionHelper()), // Agregar esto
+        ChangeNotifierProvider(
+            create: (_) => TipoOperacionHelper()), // Agregar esto
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
