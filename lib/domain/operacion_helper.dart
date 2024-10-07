@@ -5,6 +5,22 @@ import 'package:sqflite/sqflite.dart';
 class OperacionHelper extends ChangeNotifier {
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
+  List<Map<String, dynamic>> operaciones = [];
+
+  double total = 0.0;
+
+  // Obtener todas las operaciones y calcular el total
+  Future<void> getOperaciones() async {
+    operaciones = await queryAllOperaciones();
+    _calcularTotal();
+    notifyListeners();
+  }
+
+  // Calcular el total de las operaciones
+  void _calcularTotal() {
+    total = operaciones.fold(0.0, (sum, operacion) => sum + operacion['monto']);
+  }
+
   // Insertar una operación
   Future<int> insertOperacion(Map<String, dynamic> row) async {
     Database db = await _dbHelper.database;
