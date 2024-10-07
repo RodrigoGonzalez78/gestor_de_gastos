@@ -18,12 +18,18 @@ class OperacionHelper extends ChangeNotifier {
 
   // Calcular el total de las operaciones
   void _calcularTotal() {
-    total = operaciones.fold(0.0, (sum, operacion) => sum + operacion['monto']);
+
+
+    total = operaciones.fold(0.0, (sum, operacion) =>  operacion['tipo_operacion'] == 2
+    ? sum + operacion['monto'] 
+    : sum - operacion['monto']
+);
   }
 
   // Insertar una operación
   Future<int> insertOperacion(Map<String, dynamic> row) async {
     Database db = await _dbHelper.database;
+    notifyListeners();
     return await db.insert('Operacion', row);
   }
 
