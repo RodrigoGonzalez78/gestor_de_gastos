@@ -30,7 +30,7 @@ class DatabaseHelper {
       CREATE TABLE Categoria (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         descripcion TEXT NOT NULL,
-        color TEXT,
+        color TEXT
       )
     ''');
 

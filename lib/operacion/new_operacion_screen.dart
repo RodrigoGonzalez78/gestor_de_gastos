@@ -3,6 +3,7 @@ import 'package:gestor_de_gastos/domain/categoria_helper.dart';
 import 'package:gestor_de_gastos/domain/operacion_helper.dart';
 import 'package:gestor_de_gastos/domain/tipo_operacion_helper.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class NewOperacionScreen extends StatefulWidget {
   const NewOperacionScreen({super.key});
@@ -133,6 +134,12 @@ class _NewOperacionScreenState extends State<NewOperacionScreen> {
                   return const CircularProgressIndicator();
                 }
                 if (snapshot.hasError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(snapshot.error.toString()),
+                    ),
+                  );
+
                   return const Text('Error al cargar tipos de operación');
                 }
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
