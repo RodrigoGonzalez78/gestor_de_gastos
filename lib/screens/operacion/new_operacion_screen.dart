@@ -43,20 +43,8 @@ class _NewOperacionScreenState extends State<NewOperacionScreen> {
       'tipo_operacion': int.parse(_tipoOperacionSeleccionada!),
     };
 
-    await Provider.of<OperacionHelper>(context, listen: false)
-        .insertOperacion(nuevaOperacion);
-
-    // Limpiar campos
-    _montoController.clear();
-    _fechaController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
-    setState(() {
-      _categoriaSeleccionada = null;
-      _tipoOperacionSeleccionada = null;
-    });
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('Operación añadida!')));
+    context.read<OperacionHelper>().insertOperacion(nuevaOperacion);
+    Navigator.pop(context);
   }
 
   Future<void> _selectDate(BuildContext context) async {

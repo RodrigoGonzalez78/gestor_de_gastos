@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gestor_de_gastos/categoria/new_categoria_screen.dart';
+import 'package:gestor_de_gastos/screens/categoria/new_categoria_screen.dart';
 import 'package:gestor_de_gastos/domain/categoria_helper.dart';
 import 'package:gestor_de_gastos/domain/operacion_helper.dart';
 import 'package:gestor_de_gastos/domain/tipo_operacion_helper.dart';
-import 'package:gestor_de_gastos/home/home.dart';
-import 'package:gestor_de_gastos/operacion/new_operacion_screen.dart';
+import 'package:gestor_de_gastos/screens/home/home.dart';
+import 'package:gestor_de_gastos/screens/operacion/new_operacion_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Gestor de gastos',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
